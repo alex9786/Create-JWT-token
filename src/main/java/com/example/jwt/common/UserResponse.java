@@ -4,7 +4,7 @@ public class UserResponse {
 
 	private Integer status;
 	private Object data;
-	private Object messege;
+	private Object message;
 	
 	
 	public Integer getStatus() {
@@ -19,11 +19,11 @@ public class UserResponse {
 	public void setData(Object data) {
 		this.data = data;
 	}
-	public Object getMessege() {
-		return messege;
+	public Object getMessage() {
+		return message;
 	}
-	public void setMessege(Object messege) {
-		this.messege = messege;
+	public void setMessage(Object message) {
+		this.message = message;
 	}
 	
 	

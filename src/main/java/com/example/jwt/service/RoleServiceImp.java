@@ -2,12 +2,14 @@ package com.example.jwt.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.jwt.common.JwtToken;
+import com.example.jwt.common.PasswordUtil;
 import com.example.jwt.common.UserResponse;
 import com.example.jwt.dto.AdminDto;
 import com.example.jwt.dto.UserDto;
@@ -23,6 +25,9 @@ public class RoleServiceImp implements RoleService {
 	@Autowired
 	JwtToken jwtToken;
 	
+	@Autowired
+	PasswordUtil passwordUtil;
+	
 	@Override
 	public Role postRole(Role role) {
 		return roleRepo.save(role);
@@ -36,10 +41,10 @@ public class RoleServiceImp implements RoleService {
 		role.setFirstName(userDto.getFirstName());
 		role.setLastName(userDto.getLastName());
 		role.setDateOfBirth(userDto.getDateOfBirth());
-		role.setPassword(userDto.getPassword());
+		role.setPassword(PasswordUtil.passwordEncryption(userDto.getPassword()));
 		roleRepo.save(role);
 		userResponse.setStatus(HttpStatus.OK.value());
-		userResponse.setData("successfully");
+		userResponse.setData(role);
 		return userResponse;
 
 	}
@@ -47,12 +52,13 @@ public class RoleServiceImp implements RoleService {
 	@Override
 	public UserResponse adminPage(AdminDto adminDto) {
 		UserResponse userResponse = new UserResponse();
-		Role role = roleRepo.findByUserNameAndPassword(adminDto.getUserName(), adminDto.getPassword());
+		Role role = roleRepo.findByUserNameAndPassword(adminDto.getUserName(),adminDto.getPassword());
+				//PasswordUtil.passwordEncryption(adminDto.getPassword()));
 
 		if (role == null) {
 			userResponse.setData("login failed");
 			userResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-			userResponse.setMessege("bad request");
+			userResponse.setMessage("bad request");
 			return userResponse;
 		} else {
 			userResponse.setStatus(HttpStatus.OK.value());
@@ -63,7 +69,29 @@ public class RoleServiceImp implements RoleService {
 			return userResponse;
 
 		}
-
 	}
+
+	@Override
+	public UserResponse getDetail(AdminDto adminDto) {
+		UserResponse userResponse = new UserResponse();
+		Optional<Role> role =roleRepo.findByName(adminDto.getUserName());
+		Role entity = role.get();
+		String realPassword = entity.getPassword();
+		String encryptionPassword =PasswordUtil.passwordEncryption(adminDto.getPassword());
+		
+		if(realPassword.equals(encryptionPassword)) {
+			userResponse.setStatus(HttpStatus.OK.value());
+			userResponse.setData(entity);
+			userResponse.setMessage("the password is valid");
+		}else {
+			userResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+			userResponse.setData("bad request");
+			userResponse.setMessage("the password is unvalid");
+		}
+		return userResponse;
+	}
+	
+	
+
 
 }

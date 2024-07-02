@@ -33,5 +33,9 @@ public class JwtToken {
 	
 		return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact() ;
 	}
+	
+	
+	
+	
 
 }

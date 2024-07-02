@@ -13,4 +13,6 @@ public interface RoleService {
 
 	UserResponse adminPage(AdminDto adminDto);
 
+	UserResponse getDetail(AdminDto adminDto);
+
 }
