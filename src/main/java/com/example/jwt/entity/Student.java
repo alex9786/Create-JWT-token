@@ -15,17 +15,17 @@ public class Student {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
-	private int id;
+	private int stdId;
 	private String name;
 	private String department;
 	private long contact;
+
 	
-	
-	public int getId() {
-		return id;
+	public int getStdId() {
+		return stdId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setStdId(int stdId) {
+		this.stdId = stdId;
 	}
 	public String getName() {
 		return name;

@@ -14,17 +14,17 @@ public class Staff {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int sId;
 	private String name;
 	private String department;
 	private long contact;
 	
 	
-	public int getId() {
-		return id;
+	public int getsId() {
+		return sId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setsId(int sId) {
+		this.sId = sId;
 	}
 	public String getName() {
 		return name;
